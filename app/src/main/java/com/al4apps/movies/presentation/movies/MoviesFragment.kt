@@ -51,22 +51,24 @@ class MoviesFragment : AbstractFragment<FragmentMoviesBinding>(FragmentMoviesBin
 
     private fun updateLoadingState(exceptionNumber: Int) {
         when (exceptionNumber) {
-            EXCEPTION_LOADING -> {
-                Snackbar.make(
-                    binding.root,
-                    R.string.movies_error_snackbar_text,
-                    Snackbar.LENGTH_INDEFINITE
-                )
-                    .setAction(R.string.movies_error_snackbar_button_text) {
-                        viewModel.fetchMovies()
-                    }
-                    .show()
-                binding.contentContainer.isVisible = false
-            }
-
+            EXCEPTION_LOADING -> onLoadingException()
             STATE_LOADING -> showLoader(true)
             STATE_LOADING_FINISHED -> showLoader(false)
         }
+    }
+
+    private fun onLoadingException() {
+        Snackbar.make(
+            binding.root,
+            R.string.movies_error_snackbar_text,
+            Snackbar.LENGTH_INDEFINITE
+        )
+            .setAction(R.string.movies_error_snackbar_button_text) {
+                viewModel.fetchMovies()
+            }
+            .show()
+        binding.contentContainer.isVisible = false
+        binding.progressBar.isVisible = false
     }
 
     private fun bindViewModel() {
