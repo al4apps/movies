@@ -7,5 +7,13 @@
     <fragment
         android:id="@+id/moviesFragment"
         android:name="com.al4apps.movies.presentation.movies.MoviesFragment"
-        android:label="MoviesFragment" />
+        android:label="MoviesFragment" >
+        <action
+            android:id="@+id/action_moviesFragment_to_movieFragment"
+            app:destination="@id/movieFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/movieFragment"
+        android:name="com.al4apps.movies.presentation.movie.MovieFragment"
+        android:label="MovieFragment" />
 </navigation>

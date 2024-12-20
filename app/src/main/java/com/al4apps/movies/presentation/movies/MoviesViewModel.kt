@@ -14,47 +14,60 @@ class MoviesViewModel(
 ) : ViewModel() {
 
     private var moviesList = emptyList<MovieItem>()
+    private var selectedGenre = ""
 
     private val _moviesLiveData = MutableLiveData<List<MovieItem>>()
     val moviesLiveData: LiveData<List<MovieItem>>
         get() = _moviesLiveData
 
-    private val _genresLiveData = MutableLiveData<List<String>>()
-    val genresLiveData: LiveData<List<String>>
+    private val _genresLiveData = MutableLiveData<List<Genre>>()
+    val genresLiveData: LiveData<List<Genre>>
         get() = _genresLiveData
 
-    private val _isLoadingLiveData = MutableLiveData<Boolean>()
-    val isLoadingLiveData: LiveData<Boolean>
-        get() = _isLoadingLiveData
+    private val _loadingStateLiveData = MutableLiveData<Int>()
+    val loadingStateLiveData: LiveData<Int> get() = _loadingStateLiveData
 
     init {
-        getMovies()
+        fetchMovies()
     }
 
-    fun getMovies() {
+    fun fetchMovies() {
         viewModelScope.launch {
             try {
-                _isLoadingLiveData.value = true
+                _loadingStateLiveData.value = MoviesFragment.STATE_LOADING
                 moviesList = getMoviesUseCase.get().sortedBy { it.localizedName }
-                Log.d("MoviesViewModel", moviesList.joinToString("\n"))
                 updateGenres(moviesList)
-                _moviesLiveData.value = moviesList
+                showMoviesBySelectedGenre()
+                _loadingStateLiveData.value = MoviesFragment.STATE_LOADING_FINISHED
             } catch (t: Throwable) {
                 Log.d("MoviesViewModel", t.message.toString())
-            } finally {
-                _isLoadingLiveData.value = false
+                _loadingStateLiveData.value = MoviesFragment.EXCEPTION_LOADING
             }
         }
     }
 
-    private fun updateGenres(movies: List<MovieItem>) {
-        val genresSet = mutableSetOf<String>()
-        movies.map { genresSet.addAll(it.genres) }
-        Log.d("MoviesViewModel", genresSet.joinToString("\n"))
-        _genresLiveData.value = genresSet.toList()
+    fun updateSelectedGenre(genre: String) {
+        selectedGenre = if (genre.lowercase() != selectedGenre) {
+            genre.lowercase()
+        } else ""
+        showMoviesBySelectedGenre()
+        updateGenres(moviesList)
     }
 
-    fun showMoviesByGenre(genre: String) {
-        _moviesLiveData.value = moviesList.filter { it.genres.contains(genre) }
+    private fun updateGenres(movies: List<MovieItem>) {
+        val genresSet = mutableSetOf<String>()
+        movies.forEach { genresSet.addAll(it.genres) }
+
+        _genresLiveData.value = genresSet.map { name ->
+            Genre(
+                name.replaceFirstChar { it.uppercase() },
+                name.lowercase() == selectedGenre.lowercase()
+            )
+        }
+    }
+
+    private fun showMoviesBySelectedGenre() {
+        _moviesLiveData.value = if (selectedGenre == "") moviesList
+        else moviesList.filter { it.genres.contains(selectedGenre) }
     }
 }

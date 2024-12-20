@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -49,25 +48,14 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation(libs.androidx.material3)
 
     implementation(libs.androidx.recyclerview)
 
-    // Compose
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-
     // Koin
-//    implementation(libs.koin.android)
-//    implementation(libs.koin.androidx.viewmodel)
-//    implementation(libs.koin.androidx.scope)
+
     implementation(libs.insert.koin.koin.core)
     implementation(libs.io.insert.koin.koin.android)
     implementation(libs.insert.koin.koin.androidx.viewmodel)
-//    implementation(libs.koin.androidx.fragment)
 
     // Navigation
     implementation(libs.androidx.navigation.fragment.ktx)
@@ -82,5 +70,7 @@ dependencies {
 
     // Coil
     implementation(libs.coil)
-    debugImplementation(libs.androidx.ui.tooling)
+
+    // CardView
+    implementation(libs.androidx.cardview)
 }

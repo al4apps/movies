@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="GenreItemTextStyle" parent="MaterialAlertDialog.Material3.Body.Text">
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+<!--        <item name="android:textColor">@color/color_black_text</item>-->
+    </style>
+
+    <style name="ItemMovieTitleTextStyle" parent="MaterialAlertDialog.Material3.Title.Text">
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/roboto_black</item>
+<!--        <item name="android:textColor">@color/color_black_text</item>-->
+    </style>
+
+    <style name="ToolbarTextStyle" parent="MaterialAlertDialog.Material3.Title.Text">
+        <item name="android:textSize">18sp</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/color_white_text</item>
+    </style>
+
+    <style name="ListTitleTextStyle" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textSize">26sp</item>
+        <item name="fontFamily">@font/roboto_black</item>
+<!--        <item name="android:textColor">@color/color_black_text</item>-->
+    </style>
+
+    <style name="MovieTitleTextOnMoviePageStyle" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/roboto_black</item>
+<!--        <item name="android:textColor">@color/color_black_text</item>-->
+    </style>
+
+    <style name="MovieRatingOnMoviePageStyle" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textSize">24sp</item>
+        <item name="fontFamily">@font/roboto_black</item>
+        <item name="android:textColor">@color/color_blue_text</item>
+    </style>
+
+    <style name="KinopoiskNameOnMoviePageStyle" parent="TextAppearance.Material3.TitleSmall">
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/color_blue_text</item>
+    </style>
+
+    <style name="MoviePageGenreTextStyle" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">@color/color_grey_text</item>
+    </style>
+
+    <style name="MoviePageDescriptionTextStyle" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/roboto_regular</item>
+<!--        <item name="android:textColor">@color/color_black_text</item>-->
+    </style>
+
+</resources>

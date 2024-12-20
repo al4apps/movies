@@ -5,6 +5,7 @@ import com.al4apps.movies.data.network.SequeniaApi
 import com.al4apps.movies.data.repository.MoviesRepositoryImpl
 import com.al4apps.movies.domain.GetMovieUseCase
 import com.al4apps.movies.domain.GetMoviesUseCase
+import com.al4apps.movies.presentation.movie.MovieViewModel
 import com.al4apps.movies.presentation.movies.MoviesViewModel
 import okhttp3.OkHttpClient
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -56,4 +57,7 @@ val uiModule = module {
         MoviesViewModel(getMoviesUseCase = get())
     }
 
+    viewModel<MovieViewModel> {
+        MovieViewModel(getMovieUseCase = get())
+    }
 }

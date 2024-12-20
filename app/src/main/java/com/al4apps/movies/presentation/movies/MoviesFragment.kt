@@ -1,106 +1,87 @@
 package com.al4apps.movies.presentation.movies
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.fragment.app.Fragment
+import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import com.al4apps.movies.R
+import com.al4apps.movies.databinding.FragmentMoviesBinding
+import com.al4apps.movies.presentation.adapters.GenresAdapter
+import com.al4apps.movies.presentation.adapters.MoviesAdapter
+import com.al4apps.movies.presentation.movie.MovieFragment
+import com.al4apps.movies.utils.AbstractFragment
+import com.al4apps.movies.utils.ItemOffsetDecoration
+import com.al4apps.movies.utils.autoCleared
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MoviesFragment : Fragment() {
+class MoviesFragment : AbstractFragment<FragmentMoviesBinding>(FragmentMoviesBinding::inflate) {
 
     private val viewModel by viewModel<MoviesViewModel>()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                MoviesFragmentScreen()
-            }
-        }
-    }
+    private var genresAdapter: GenresAdapter by autoCleared()
+    private var moviesAdapter: MoviesAdapter by autoCleared()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel
+        initAdapter()
+        bindViewModel()
     }
 
-    @Composable
-    private fun MoviesFragmentScreen() {
+    private fun initAdapter() {
+        genresAdapter = GenresAdapter { genre ->
+            viewModel.updateSelectedGenre(genre)
+        }
+        binding.genresRecyclerView.adapter = genresAdapter
 
-
+        moviesAdapter = MoviesAdapter { id ->
+            val bundle = bundleOf(MovieFragment.MOVIE_ID_KEY to id)
+            val action = R.id.movieFragment
+            findNavController().navigate(action, bundle)
+        }
+        val decor = ItemOffsetDecoration(requireContext())
+        binding.moviesRecyclerView.adapter = moviesAdapter
+        binding.moviesRecyclerView.addItemDecoration(decor)
     }
 
+    private fun showLoader(isLoading: Boolean) {
+        binding.contentContainer.isVisible = !isLoading
+        binding.progressBar.isVisible = isLoading
+    }
 
-
-    @Composable
-    private fun GenresTitleItem() {
-        Row(
-            modifier = Modifier.apply {
-                fillMaxWidth()
-                padding(start = 16.dp)
+    private fun updateLoadingState(exceptionNumber: Int) {
+        when (exceptionNumber) {
+            EXCEPTION_LOADING -> {
+                Snackbar.make(
+                    binding.root,
+                    R.string.movies_error_snackbar_text,
+                    Snackbar.LENGTH_INDEFINITE
+                )
+                    .setAction(R.string.movies_error_snackbar_button_text) {
+                        viewModel.fetchMovies()
+                    }
+                    .show()
+                binding.contentContainer.isVisible = false
             }
-        ) {
-            Text(
-                text = stringResource(R.string.movies_genres_title),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
+
+            STATE_LOADING -> showLoader(true)
+            STATE_LOADING_FINISHED -> showLoader(false)
         }
     }
 
-    @Composable
-    private fun GenreItem(genre: String) {
-        Row(
-            modifier = Modifier.apply {
-                fillMaxWidth()
-                padding(start = 16.dp)
-            }
-        ) {
-            Text(
-                text = genre,
-                fontSize = 16.sp
-            )
+    private fun bindViewModel() {
+        viewModel.genresLiveData.observe(viewLifecycleOwner) { list ->
+            genresAdapter.submitList(list)
         }
-    }
-}
-
-/**         Preview             **/
-
-@Composable
-fun GenresTitleItem() {
-    Row(
-        modifier = Modifier.apply {
-            fillMaxWidth()
-            padding(start = 16.dp)
+        viewModel.moviesLiveData.observe(viewLifecycleOwner) { movies ->
+            moviesAdapter.submitList(movies)
         }
-    ) {
-        Text(
-            text = stringResource(R.string.movies_genres_title),
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
+        viewModel.loadingStateLiveData.observe(viewLifecycleOwner, ::updateLoadingState)
     }
-}
 
-@Preview
-@Composable
-fun Preview() {
-    GenresTitleItem()
+    companion object {
+        const val EXCEPTION_LOADING = 1
+        const val STATE_LOADING = 2
+        const val STATE_LOADING_FINISHED = 3
+    }
 }
