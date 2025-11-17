@@ -1,3 +1,6 @@
+import org.gradle.kotlin.dsl.kotlin
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -5,12 +8,12 @@ plugins {
 
 android {
     namespace = "com.al4apps.movies"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.al4apps.movies"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -27,14 +30,16 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     buildFeatures {
         viewBinding = true
     }
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_21)
+        }
     }
 }
 
@@ -55,7 +60,6 @@ dependencies {
 
     implementation(libs.insert.koin.koin.core)
     implementation(libs.io.insert.koin.koin.android)
-    implementation(libs.insert.koin.koin.androidx.viewmodel)
 
     // Navigation
     implementation(libs.androidx.navigation.fragment.ktx)
