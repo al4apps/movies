@@ -8,7 +8,7 @@ import com.al4apps.movies.domain.GetMoviesUseCase
 import com.al4apps.movies.presentation.movie.MovieViewModel
 import com.al4apps.movies.presentation.movies.MoviesViewModel
 import okhttp3.OkHttpClient
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

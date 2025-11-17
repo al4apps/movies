@@ -46,9 +46,6 @@
         <item name="colorSurfaceContainer">@color/md_theme_surfaceContainer</item>
         <item name="colorSurfaceContainerHigh">@color/md_theme_surfaceContainerHigh</item>
         <item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest</item>
+        <item name="android:navigationBarColor">@color/md_theme_background</item>
     </style>
-
-<!--    <style name="ActionBarStyle" parent="Widget.AppCompat.Light.ActionBar">-->
-<!--        <item name="background">@color/md_theme_primary</item>-->
-<!--    </style>-->
 </resources>
